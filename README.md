@@ -1,8 +1,20 @@
-# SAP BTP Gen AI Training for professionals - Official Git Repository
+# Bosch RAP training for fresher's - Official Git Repository
 www.anubhavtrainings.com
 contact@anubhavtrainings.com
 
-# Getting Started - Anubhav Trainings
+# Day 1: Introduction to CDS entities and CDS Views - 28-July-2025
+# Day 2: ABAP RESTful Application Programming Model (RAP) - Introduction Scenario / Modeling /  - 29-July-2025
+# Day 3: ABAP RESTful Application Programming Model (RAP) - Fiori App / BDEF / EML / Behavior Imp.  - 30-July-2025
+# Day 4: ABAP RESTful Application Programming Model (RAP) - Actions / Determinations / Feature Control - 31-July-2025
+# Day 5: ABAP RESTful Application Programming Model (RAP) - Advance Features - composition / Fiori Elements - 01-Aug-2025
+# Day 6: ABAP RESTful Application Programming Model (RAP) - Draft / Feature Control / Authorization / Prechecks - 04-Aug-2025
+# Day 7: ABAP RESTful Application Programming Model (RAP) - File Upload / Factory Actions / BAS / Deploy App to cloud - 05-Aug-2025
+# Day 8: ABAP RESTful Application Programming Model (RAP) - Build Workzone / Deploying to Onpremise / Launchpad - 06-Aug-2025
+# Day 9: ABAP RESTful Application Programming Model (RAP) - SAP UI5 and Fiori - 07-Aug-2025
+# Day 10: ABAP RESTful Application Programming Model (RAP) - Introduction to CAP - 08-Aug-2025
+
+
+# Other Courses - Anubhav Trainings 
 
 ## SAP BTP CAPM Training | SAP Cloud Foundry Training - Current Module
 
