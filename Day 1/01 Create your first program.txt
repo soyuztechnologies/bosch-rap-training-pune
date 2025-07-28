@@ -1,4 +1,4 @@
-CLASS zats_xx_hello_aoc DEFINITION
+CLASS zbsh_xx_hello_aoc DEFINITION
   PUBLIC
   FINAL
   CREATE PUBLIC .
@@ -11,7 +11,7 @@ CLASS zats_xx_hello_aoc DEFINITION
 ENDCLASS.
 
 
-CLASS zats_xx_hello_aoc IMPLEMENTATION.
+CLASS zbsh_xx_hello_aoc IMPLEMENTATION.
 
   METHOD if_oo_adt_classrun~main.
 
