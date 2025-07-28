@@ -3,10 +3,10 @@
 @AbapCatalog.tableCategory : #TRANSPARENT
 @AbapCatalog.deliveryClass : #A
 @AbapCatalog.dataMaintenance : #ALLOWED
-define table zdxc_xx_bpa {
+define table zbsh_xx_bpa {
   key client   : abap.clnt not null;
-  key bp_id    : zdxc_xx_dte_id not null;
-  bp_role      : zdxc_xx_dte_bp_role;
+  key bp_id    : zbsh_xx_dte_id not null;
+  bp_role      : zbsh_xx_dte_bp_role;
   @EndUserText.label : 'Company Name'
   company_name : abap.string(256);
   @EndUserText.label : 'Street'
@@ -26,9 +26,9 @@ define table zdxc_xx_bpa {
 @AbapCatalog.tableCategory : #TRANSPARENT
 @AbapCatalog.deliveryClass : #A
 @AbapCatalog.dataMaintenance : #RESTRICTED
-define table zdxc_xx_product {
+define table zbsh_xx_product {
   key client     : abap.clnt not null;
-  key product_id : zdxc_xx_dte_id not null;
+  key product_id : zbsh_xx_dte_id not null;
   name           : abap.string(256);
   category       : abap.char(40);
   price          : int4;
@@ -43,18 +43,18 @@ define table zdxc_xx_product {
 @AbapCatalog.tableCategory : #TRANSPARENT
 @AbapCatalog.deliveryClass : #A
 @AbapCatalog.dataMaintenance : #RESTRICTED
-define table zdxc_xx_so_hdr {
+define table zbsh_xx_so_hdr {
   key client    : abap.clnt not null;
-  key order_id  : zdxc_xx_dte_id not null;
+  key order_id  : zbsh_xx_dte_id not null;
   order_no      : int4;
   @AbapCatalog.foreignKey.screenCheck : false
-  buyer         : zdxc_xx_dte_id not null
-    with foreign key [0..*,1] zdxc_xx_bpa
-      where bp_id = zdxc_xx_so_hdr.buyer;
-  @Semantics.amount.currencyCode : 'zdxc_xx_so_hdr.currency_code'
+  buyer         : zbsh_xx_dte_id not null
+    with foreign key [0..*,1] zbsh_xx_bpa
+      where bp_id = zbsh_xx_so_hdr.buyer;
+  @Semantics.amount.currencyCode : 'zbsh_xx_so_hdr.currency_code'
   gross_amount  : abap.curr(10,2);
   currency_code : abap.cuky;
-  include zdxc_xx_admin_data;
+  include zbsh_xx_admin_data;
 
 }
 
@@ -64,18 +64,18 @@ define table zdxc_xx_so_hdr {
 @AbapCatalog.tableCategory : #TRANSPARENT
 @AbapCatalog.deliveryClass : #A
 @AbapCatalog.dataMaintenance : #RESTRICTED
-define table zdxc_xx_so_item {
+define table zbsh_xx_so_item {
   key client  : abap.clnt not null;
-  key item_id : zdxc_xx_dte_id not null;
-  order_id    : zdxc_xx_dte_id not null;
+  key item_id : zbsh_xx_dte_id not null;
+  order_id    : zbsh_xx_dte_id not null;
   @AbapCatalog.foreignKey.screenCheck : false
-  product     : zdxc_xx_dte_id not null
-    with foreign key [0..*,1] zdxc_xx_product
-      where product_id = zdxc_xx_so_item.product;
-  @Semantics.quantity.unitOfMeasure : 'zdxc_xx_so_item.uom'
+  product     : zbsh_xx_dte_id not null
+    with foreign key [0..*,1] zbsh_xx_product
+      where product_id = zbsh_xx_so_item.product;
+  @Semantics.quantity.unitOfMeasure : 'zbsh_xx_so_item.uom'
   qty         : abap.quan(5,0);
   uom         : abap.unit(3);
-  @Semantics.amount.currencyCode : 'zdxc_xx_so_item.currency'
+  @Semantics.amount.currencyCode : 'zbsh_xx_so_item.currency'
   amount      : abap.curr(15,2);
   currency    : abap.cuky;
 
@@ -84,7 +84,7 @@ define table zdxc_xx_so_item {
 
 @EndUserText.label : 'Administrative data - structure'
 @AbapCatalog.enhancement.category : #NOT_EXTENSIBLE
-define structure zdxc_xx_admin_data {
+define structure zbsh_xx_admin_data {
   created_by : abap.char(16);
   created_on : timestamp;
   changed_by : abap.char(16);
@@ -94,7 +94,7 @@ define structure zdxc_xx_admin_data {
 
 
 
-CLASS zdxc_xx_data_manager DEFINITION
+CLASS zbsh_xx_data_manager DEFINITION
   PUBLIC
   FINAL
   CREATE PUBLIC .
@@ -110,7 +110,7 @@ ENDCLASS.
 
 
 
-CLASS zdxc_xx_data_manager IMPLEMENTATION.
+CLASS zbsh_xx_data_manager IMPLEMENTATION.
   METHOD if_oo_adt_classrun~main.
     flush( ).
     fill_master_data( ).
@@ -125,8 +125,8 @@ CLASS zdxc_xx_data_manager IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD fill_master_data.
-    data : lt_bp type table of zdxc_xx_bpa,
-           lt_prod type table of zdxc_xx_product.
+    data : lt_bp type table of zbsh_xx_bpa,
+           lt_prod type table of zbsh_xx_product.
 
     append value #(
                     bp_id = cl_uuid_factory=>create_system_uuid( )->create_uuid_c32( )
@@ -264,8 +264,8 @@ CLASS zdxc_xx_data_manager IMPLEMENTATION.
                     )
                     to lt_prod.
 
-     insert zdxc_xx_bpa from table @lt_bp.
-     insert zdxc_xx_product from table @lt_prod.
+     insert zbsh_xx_bpa from table @lt_bp.
+     insert zbsh_xx_product from table @lt_prod.
   ENDMETHOD.
 
   METHOD fill_transaction_data.
@@ -273,9 +273,9 @@ CLASS zdxc_xx_data_manager IMPLEMENTATION.
            n type i,
            seed type i,
            lv_date type timestamp,
-           lv_ord_id type zdxc_xx_dte_id,
-           lt_so type table of zdxc_xx_so_hdr,
-           lt_so_i type table of zdxc_xx_so_item.
+           lv_ord_id type zbsh_xx_dte_id,
+           lt_so type table of zbsh_xx_so_hdr,
+           lt_so_i type table of zbsh_xx_so_item.
 
     seed = cl_abap_random=>seed( ).
     cl_abap_random_int=>create(
@@ -288,8 +288,8 @@ CLASS zdxc_xx_data_manager IMPLEMENTATION.
     ).
     get time stamp FIELD lv_date.
 
-    select * from zdxc_xx_bpa into table @data(lt_bpa).
-    select * from zdxc_xx_product into table @data(lt_prod).
+    select * from zbsh_xx_bpa into table @data(lt_bpa).
+    select * from zbsh_xx_product into table @data(lt_prod).
 
     do 50 times.
         lv_ord_id = cl_uuid_factory=>create_system_uuid( )->create_uuid_c32(  ).
@@ -321,13 +321,13 @@ CLASS zdxc_xx_data_manager IMPLEMENTATION.
         enddo.
     enddo.
 
-    insert zdxc_xx_so_hdr from table @lt_so.
-    insert zdxc_xx_so_item from table @lt_so_i.
+    insert zbsh_xx_so_hdr from table @lt_so.
+    insert zbsh_xx_so_item from table @lt_so_i.
 
   ENDMETHOD.
 
   METHOD flush.
-    delete from : zdxc_xx_bpa, zdxc_xx_product, zdxc_xx_so_hdr, zdxc_xx_so_item.
+    delete from : zbsh_xx_bpa, zbsh_xx_product, zbsh_xx_so_hdr, zbsh_xx_so_item.
   ENDMETHOD.
 
 ENDCLASS.

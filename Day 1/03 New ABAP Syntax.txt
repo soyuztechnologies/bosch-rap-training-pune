@@ -1,6 +1,6 @@
 ""Brought to you by www.anubhavtrainings.com
 
-CLASS zcl_dxc_xxabap_syntax DEFINITION
+CLASS zcl_zbsh_xx_abap_syntax DEFINITION
   PUBLIC
   FINAL
   CREATE PUBLIC .
@@ -24,18 +24,18 @@ ENDCLASS.
 
 
 
-CLASS zcl_dxc_xxabap_syntax IMPLEMENTATION.
+CLASS zcl_zbsh_xx_abap_syntax IMPLEMENTATION.
   METHOD if_oo_adt_classrun~main.
-    zcl_dxc_xxabap_syntax=>s1_using_key_expression( EXPORTING out = out ).
-    zcl_dxc_xxabap_syntax=>s1_constructor_expression( EXPORTING out = out ).
-    zcl_dxc_xxabap_syntax=>s1_table_expression( EXPORTING out = out ).
-    zcl_dxc_xxabap_syntax=>s1_loop_reduce_statement( EXPORTING out = out ).
-    zcl_dxc_xxabap_syntax=>s1_loop_with_single_line( EXPORTING out = out ).
-    zcl_dxc_xxabap_syntax=>s1_loop_with_grouping( EXPORTING out = out ).
-    zcl_dxc_xxabap_syntax=>s1_cond_conv_exp( EXPORTING out = out ).
-    zcl_dxc_xxabap_syntax=>s1_inline_declaration(  EXPORTING out = out ).
-    zcl_dxc_xxabap_syntax=>s1_value_expression( EXPORTING out = out ).
-    zcl_dxc_xxabap_syntax=>s1_corresponding_data( EXPORTING out = out ).
+    zcl_zbsh_xx_abap_syntax=>s1_using_key_expression( EXPORTING out = out ).
+    zcl_zbsh_xx_abap_syntax=>s1_constructor_expression( EXPORTING out = out ).
+    zcl_zbsh_xx_abap_syntax=>s1_table_expression( EXPORTING out = out ).
+    zcl_zbsh_xx_abap_syntax=>s1_loop_reduce_statement( EXPORTING out = out ).
+    zcl_zbsh_xx_abap_syntax=>s1_loop_with_single_line( EXPORTING out = out ).
+    zcl_zbsh_xx_abap_syntax=>s1_loop_with_grouping( EXPORTING out = out ).
+    zcl_zbsh_xx_abap_syntax=>s1_cond_conv_exp( EXPORTING out = out ).
+    zcl_zbsh_xx_abap_syntax=>s1_inline_declaration(  EXPORTING out = out ).
+    zcl_zbsh_xx_abap_syntax=>s1_value_expression( EXPORTING out = out ).
+    zcl_zbsh_xx_abap_syntax=>s1_corresponding_data( EXPORTING out = out ).
 
   ENDMETHOD.
 
