@@ -2,10 +2,10 @@ Step 1: Enhancement of base travel root entity for value help and extra column
 
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Travel Root of by RAP BO'
-define root view entity ZATS_XX_TRAVEL as select from /dmo/travel_m
+define root view entity ZBSH_XX_TRAVEL as select from /dmo/travel_m
 
 --Composition child for travel viz booking
-composition[0..*] of ZATS_XX_BOOKING as _Booking 
+composition[0..*] of ZBSH_XX_BOOKING as _Booking 
 --associations - lose coupling to get dependent data
 association[1] to /DMO/I_Agency as _Agency on 
     $projection.AgencyId = _Agency.AgencyID
@@ -63,7 +63,7 @@ Step 2: Create travel root entity projection for processor
 @EndUserText.label: 'My Travel processor projection'
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @Metadata.allowExtensions: true
-define root view entity ZATS_XX_TRAVEL_PROCESSOR as projection on ZATS_XX_TRAVEL
+define root view entity ZBSH_XX_TRAVEL_PROCESSOR as projection on ZBSH_XX_TRAVEL
 {
     @ObjectModel.text.element: [ 'Description' ]
     key TravelId,
@@ -117,7 +117,7 @@ Step 3: Create booking entity projection for processor
 @EndUserText.label: 'My Travel processor projection'
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @Metadata.allowExtensions: true
-define view entity ZATS_XX_BOOKING_PROCESSOR as projection on ZATS_XX_BOOKING
+define view entity ZBSH_XX_BOOKING_PROCESSOR as projection on ZBSH_XX_BOOKING
 {
     key TravelId,
     key BookingId,
@@ -136,7 +136,7 @@ define view entity ZATS_XX_BOOKING_PROCESSOR as projection on ZATS_XX_BOOKING
     _Carrier,
     _Connection,
     _Customer,
-    _Travel: redirected to parent ZATS_XX_TRAVEL_PROCESSOR
+    _Travel: redirected to parent ZBSH_XX_TRAVEL_PROCESSOR
 }
 
 
@@ -145,8 +145,8 @@ Step 4: Create booking supplement entity projection for processor
 @EndUserText.label: 'My Travel processor projection'
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @Metadata.allowExtensions: true
-define view entity ZATS_XX_BOOKSUPPL_PROCESSOR 
-    as projection on ZATS_XX_BOOKSUPPL
+define view entity ZBSH_XX_BOOKSUPPL_PROCESSOR 
+    as projection on ZBSH_XX_BOOKSUPPL
 {
     key TravelId,
     key BookingId,
@@ -156,7 +156,7 @@ define view entity ZATS_XX_BOOKSUPPL_PROCESSOR
     CurrencyCode,
     LastChangedAt,
     /* Associations */
-    _Booking: redirected to parent ZATS_XX_BOOKING_PROCESSOR,
+    _Booking: redirected to parent ZBSH_XX_BOOKING_PROCESSOR,
     _Travel
 }
 
@@ -168,7 +168,7 @@ Step 5: Create metadata extensions file for travel
     typeName: 'Travel',
     typeNamePlural: 'Travels'
  }
-annotate view ZATS_XX_TRAVEL_PROCESSOR
+annotate view ZBSH_XX_TRAVEL_PROCESSOR
     with 
 {
     @UI.selectionField: [{ position: 10 }]
@@ -203,10 +203,10 @@ annotate view ZATS_XX_TRAVEL_PROCESSOR
 Step 6: Create service definition
 
 @EndUserText.label: 'Processor App ke lie service'
-define service ZATS_XX_SD_V2_PROCESSOR {
-  expose ZATS_XX_TRAVEL_PROCESSOR    as Travel;
-  expose ZATS_XX_BOOKING_PROCESSOR   as Booking;
-  expose ZATS_XX_BOOKSUPPL_PROCESSOR as BookSupplement;
+define service ZBSH_XX_SD_V2_PROCESSOR {
+  expose ZBSH_XX_TRAVEL_PROCESSOR    as Travel;
+  expose ZBSH_XX_BOOKING_PROCESSOR   as Booking;
+  expose ZBSH_XX_BOOKSUPPL_PROCESSOR as BookSupplement;
   expose /DMO/I_Agency               as Agency;
   expose /DMO/I_Customer             as Customer;
   expose /DMO/I_Carrier              as Carrier;
