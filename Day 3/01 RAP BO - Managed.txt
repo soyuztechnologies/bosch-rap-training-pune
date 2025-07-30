@@ -3,10 +3,10 @@ Step 1: Create root entity for Travel (header data)
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 
 @EndUserText.label: 'Travel Root of by RAP BO'
-define root view entity ZATS_XX_TRAVEL as select from /dmo/travel_m
+define root view entity ZBSH_XX_TRAVEL as select from /dmo/travel_m
 
 --Composition child for travel viz booking
-composition[0..*] of ZATS_XX_BOOKING as _Booking 
+composition[0..*] of ZBSH_XX_BOOKING as _Booking 
 --associations - lose coupling to get dependent data
 association[1] to /DMO/I_Agency as _Agency on 
     $projection.AgencyId = _Agency.AgencyID
@@ -52,9 +52,9 @@ Step 2: Create child entity for booking data
 
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Booking as child entity'
-define view entity ZATS_XX_BOOKING as select from /dmo/booking_m
-composition[0..*] of ZATS_XX_BOOKSUPPL as _BookingSupplement
-association to parent ZATS_XX_TRAVEL as _Travel on
+define view entity ZBSH_XX_BOOKING as select from /dmo/booking_m
+composition[0..*] of ZBSH_XX_BOOKSUPPL as _BookingSupplement
+association to parent ZBSH_XX_TRAVEL as _Travel on
     $projection.TravelId = _Travel.TravelId
 association[1..1] to /DMO/I_Customer as _Customer on
     $projection.CustomerId = _Customer.CustomerID
@@ -94,11 +94,11 @@ Step 2: Create child entity for booking supplements data
 
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Booking Supplements as child of comp tree'
-define view entity ZATS_XX_BOOKSUPPL as select from /dmo/booksuppl_m
-association to parent ZATS_XX_BOOKING as _Booking on
+define view entity ZBSH_XX_BOOKSUPPL as select from /dmo/booksuppl_m
+association to parent ZBSH_XX_BOOKING as _Booking on
     $projection.BookingId = _Booking.BookingId and
     $projection.TravelId = _Booking.TravelId
-association[1..1] to ZATS_XX_TRAVEL as _Travel on
+association[1..1] to ZBSH_XX_TRAVEL as _Travel on
     $projection.TravelId = _Travel.TravelId
 association[1..1] to /DMO/I_Supplement as _Product on
     $projection.SupplementId = _Product.SupplementID
