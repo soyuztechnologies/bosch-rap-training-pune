@@ -21,7 +21,7 @@ CLASS zcl_lam_ab_eml IMPLEMENTATION.
   case lv_opr.
         when 'R'.
 
-            READ ENTITIES OF ZLAM_AB_TRAVEL
+            READ ENTITIES OF ZBSH_XX_TRAVEL
             ENTITY Travel
             FIELDS ( travelid agencyid CustomerId OverallStatus ) WITH
             VALUE #( ( TravelId = '00000010' )
@@ -49,7 +49,7 @@ CLASS zcl_lam_ab_eml IMPLEMENTATION.
             data(lv_agency) = '070016'.
             data(lv_customer) = '000697'.
 
-            MODIFY ENTITIES OF ZLAM_AB_TRAVEL
+            MODIFY ENTITIES OF ZBSH_XX_TRAVEL
             ENTITY Travel
             CREATE FIELDS ( TravelId AgencyId CurrencyCode BeginDate EndDate Description OverallStatus )
             WITH VALUE #(
@@ -104,7 +104,7 @@ CLASS zcl_lam_ab_eml IMPLEMENTATION.
             lv_description = 'Wow, That was an update'.
             lv_agency = '070032'.
 
-            MODIFY ENTITIES OF ZLAM_AB_TRAVEL
+            MODIFY ENTITIES OF ZBSH_XX_TRAVEL
             ENTITY Travel
             UPDATE FIELDS ( AgencyId Description )
             WITH VALUE #(
@@ -135,7 +135,7 @@ CLASS zcl_lam_ab_eml IMPLEMENTATION.
 
         when 'D'.
 
-        MODIFY ENTITIES OF ZLAM_AB_TRAVEL
+        MODIFY ENTITIES OF ZBSH_XX_TRAVEL
             ENTITY Travel
             DELETE FROM VALUE #(
                             ( TravelId = '00012347'

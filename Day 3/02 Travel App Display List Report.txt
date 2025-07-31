@@ -161,6 +161,11 @@ define view entity ZBSH_XX_BOOKSUPPL_PROCESSOR
 }
 
 
+Create a/c on sap.com
+open SAP BTP trial a/c - https://cockpit.hanatrial.ondemand.com/trial
+
+
+
 Step 5: Create metadata extensions file for travel
 
 @Metadata.layer: #CUSTOMER
