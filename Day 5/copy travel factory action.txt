@@ -1,0 +1,91 @@
+METHOD copyTravel.
+
+
+    DATA: travels       TYPE TABLE FOR CREATE zBSH_XX_travel\\Travel,
+          bookings_cba  TYPE TABLE FOR CREATE zBSH_XX_travel\\Travel\_Booking,
+          booksuppl_cba TYPE TABLE FOR CREATE zBSH_XX_travel\\Booking\_BookingSupplement.
+
+    "Step 1: Remove the travel instances with initial %cid
+    READ TABLE keys WITH KEY %cid = '' INTO DATA(key_with_initial_cid).
+    ASSERT key_with_initial_cid IS INITIAL.
+
+    "Step 2: Read all travel, booking and booking supplement using EML
+    READ ENTITIES OF zBSH_XX_travel IN LOCAL MODE
+    ENTITY Travel
+        ALL FIELDS WITH CORRESPONDING #( keys )
+        RESULT DATA(travel_read_result)
+        FAILED failed.
+
+    READ ENTITIES OF zBSH_XX_travel IN LOCAL MODE
+    ENTITY Travel BY \_Booking
+        ALL FIELDS WITH CORRESPONDING #( travel_read_result )
+        RESULT DATA(book_read_result)
+        FAILED failed.
+
+    READ ENTITIES OF zBSH_XX_travel IN LOCAL MODE
+    ENTITY booking BY \_BookingSupplement
+        ALL FIELDS WITH CORRESPONDING #( book_read_result )
+        RESULT DATA(booksuppl_read_result)
+        FAILED failed.
+
+    "Step 3: Fill travel internal table for travel data creation - %cid - abc123
+    LOOP AT travel_read_result ASSIGNING FIELD-SYMBOL(<travel>).
+
+      "Travel data prepration
+      APPEND VALUE #( %cid = keys[ %tky = <travel>-%tky ]-%cid
+                     %data = CORRESPONDING #( <travel> EXCEPT travelId )
+      ) TO travels ASSIGNING FIELD-SYMBOL(<new_travel>).
+
+      <new_travel>-BeginDate = cl_abap_context_info=>get_system_date( ).
+      <new_travel>-EndDate = cl_abap_context_info=>get_system_date( ) + 30.
+      <new_travel>-OverallStatus = 'O'.
+      CLEAR <new_travel>-TravelId.
+
+      "Step 3: Fill booking internal table for booking data creation - %cid_ref - abc123
+      APPEND VALUE #( %cid_ref = keys[ KEY entity %tky = <travel>-%tky ]-%cid )
+        TO bookings_cba ASSIGNING FIELD-SYMBOL(<bookings_cba>).
+
+      LOOP AT  book_read_result ASSIGNING FIELD-SYMBOL(<booking>) WHERE TravelId = <travel>-TravelId.
+
+        APPEND VALUE #( %cid = keys[ KEY entity %tky = <travel>-%tky ]-%cid && <booking>-BookingId
+                        %data = CORRESPONDING #( book_read_result[ KEY entity %tky = <booking>-%tky ] EXCEPT travelid )
+        )
+            TO <bookings_cba>-%target ASSIGNING FIELD-SYMBOL(<new_booking>).
+
+        <new_booking>-BookingStatus = 'N'.
+
+        "Step 4: Fill booking supplement internal table for booking suppl data creation
+        APPEND VALUE #( %cid_ref = keys[ KEY entity %tky = <travel>-%tky ]-%cid && <booking>-BookingId )
+                TO booksuppl_cba ASSIGNING FIELD-SYMBOL(<booksuppl_cba>).
+
+        LOOP AT booksuppl_read_result ASSIGNING FIELD-SYMBOL(<booksuppl>)
+            USING KEY entity WHERE TravelId = <travel>-TravelId AND
+                                   BookingId = <booking>-BookingId.
+
+          APPEND VALUE #( %cid = keys[ KEY entity %tky = <travel>-%tky ]-%cid && <booking>-BookingId && <booksuppl>-BookingSupplementId
+                      %data = CORRESPONDING #( <booksuppl> EXCEPT travelid bookingid )
+          )
+          TO <booksuppl_cba>-%target.
+
+        ENDLOOP.
+      ENDLOOP.
+
+
+    ENDLOOP.
+
+    "Step 5: MODIFY ENTITY EML to create new BO instance using existing data
+    MODIFY ENTITIES OF zBSH_XX_travel IN LOCAL MODE
+        ENTITY travel
+            CREATE FIELDS ( AgencyId CustomerId BeginDate EndDate BookingFee TotalPrice CurrencyCode OverallStatus )
+                WITH travels
+                    CREATE BY \_Booking FIELDS ( Bookingid BookingDate CustomerId CarrierId ConnectionId FlightDate FlightPrice CurrencyCode BookingStatus )
+                        WITH bookings_cba
+                            ENTITY Booking
+                                CREATE BY \_BookingSupplement FIELDS ( bookingsupplementid supplementid price currencycode )
+                                    WITH booksuppl_cba
+        MAPPED DATA(mapped_create).
+
+    mapped-travel = mapped_create-travel.
+
+
+  ENDMETHOD.
